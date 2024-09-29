@@ -28,9 +28,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-#f$$n^$=@xz*(enftb+ls6l2olrf1^o-&jr!a$7g8k&q@1%cuq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['eventcrafter.up.railway.app', 'https://eventcrafter.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://eventcrafter.up.railway.app']
 
 
 # Application definition

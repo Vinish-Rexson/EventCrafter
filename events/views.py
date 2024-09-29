@@ -617,8 +617,8 @@ def update_task_view(request, pk):
         task.save()
 
         if task.completed:
-            account_sid = 'ACb604cdff6ba558c3c2b0c563a69a9a02'
-            auth_token = 'fcd5d895f608ed8d9cce2e09311045d4'
+            account_sid = 'account_sid'
+            auth_token = 'auth_token'
             client = Client(account_sid, auth_token)
             message = client.messages.create(
                 to= '+919137796495',
