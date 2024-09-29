@@ -109,10 +109,9 @@ DATABASES = {
         'USER': 'postgres',      # Replace with your PostgreSQL user
         'PASSWORD': os.environ['DB_PASSWORD'], # Replace with your PostgreSQL password
         'HOST': 'junction.proxy.rlwy.net',         # Or set the correct host if using a remote server
-        'PORT': '59931',              # Default PostgreSQL port
+        'PORT': '32916',              # Default PostgreSQL port
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
