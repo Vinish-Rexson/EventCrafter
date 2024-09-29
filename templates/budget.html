@@ -1,0 +1,293 @@
+{% extends 'base/base2.html' %}
+
+{% block content %}
+    <style>
+        /* Scoped CSS for Budget Tracker */
+        .budget-app-container {
+            border: solid 1px black;
+            background-color: #ddbfbf;
+            font-family: 'Arial', sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .budget-header {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .budget-form-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .budget-form-group input, .budget-form-group select {
+            width: 30%;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .budget-form-group button {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .budget-form-group button:hover {
+            background-color: #218838;
+        }
+
+        .budget-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .budget-list th, .budget-list td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .budget-list th {
+            background-color: #f4f4f4;
+        }
+
+        .budget-list td {
+            position: relative;
+        }
+
+        .remove-btn, .edit-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .remove-btn:hover, .edit-btn:hover {
+            background-color: #c82333;
+        }
+
+        .total-budget {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: right;
+        }
+
+        .alert {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* New Spend Analysis CSS */
+        .spend-analysis-container {
+            margin-top: 30px;
+            border-top: 2px solid #28a745;
+            padding-top: 10px;
+        }
+
+        .spend-analysis-header {
+            font-size: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .spend-analysis-item {
+            margin: 5px 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .budget-form-group {
+                flex-direction: column;
+            }
+
+            .budget-form-group input, .budget-form-group select {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+
+    <div class="budget-app-container">
+        <h1 class="budget-header">Event Budget Tracker</h1>
+
+        <!-- Budget Limit Input -->
+        <div>
+            <label for="budget-limit">Set Budget Limit:</label>
+            <input type="number" id="budget-limit" placeholder="Total Budget" required>
+        </div>
+
+        <!-- Budget Form -->
+        <form id="budget-form">
+            <div class="budget-form-group">
+                <input type="text" id="budget-item-name" placeholder="Item Name" required>
+                <input type="number" id="budget-item-cost" placeholder="Cost" required>
+                <select id="budget-item-category" required>
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="Food">Food</option>
+                    <option value="Venue">Venue</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Decorations">Decorations</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+            <div class="budget-form-group">
+                <button type="submit" id="add-item-btn">Add Item</button>
+                <button type="button" id="load-sample-btn">Load Sample Data</button>
+            </div>
+        </form>
+
+        <!-- Budget List -->
+        <table class="budget-list">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Cost</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="budget-items">
+                <!-- Dynamic content will be inserted here -->
+            </tbody>
+        </table>
+
+        <!-- Total Budget -->
+        <div class="total-budget">
+            <strong>Total: $<span id="total-budget">0</span></strong>
+            <div class="alert" id="budget-alert"></div>
+        </div>
+
+        <!-- Spend Analysis -->
+        <div class="spend-analysis-container">
+            <h3 class="spend-analysis-header">Spend Analysis</h3>
+            <div id="spend-analysis">
+                <!-- Percentage breakdown will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scoped JavaScript for Budget Tracker
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const budgetForm = document.getElementById('budget-form');
+            const budgetItems = document.getElementById('budget-items');
+            const totalBudget = document.getElementById('total-budget');
+            const budgetLimitInput = document.getElementById('budget-limit');
+            const budgetAlert = document.getElementById('budget-alert');
+            const loadSampleBtn = document.getElementById('load-sample-btn');
+
+            let items = [];
+            let budgetLimit = 0;
+
+            // Function to render the budget items
+            function renderItems() {
+                budgetItems.innerHTML = '';
+                let total = 0;
+                const categoryTotals = {};
+
+                items.forEach((item, index) => {
+                    total += item.cost;
+                    categoryTotals[item.category] = (categoryTotals[item.category] || 0) + item.cost;
+
+                    budgetItems.innerHTML += `
+                        <tr>
+                            <td>${item.name}</td>
+                            <td>$${item.cost}</td>
+                            <td>${item.category}</td>
+                            <td>
+                                <button class="edit-btn" onclick="editItem(${index})">Edit</button>
+                                <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                totalBudget.textContent = total.toFixed(2);
+                checkBudget(total);
+
+                // Update spend analysis
+                renderSpendAnalysis(categoryTotals, total);
+            }
+
+            // Function to check if budget is exceeded
+            function checkBudget(total) {
+                if (budgetLimit && total > budgetLimit) {
+                    budgetAlert.textContent = "Warning: You have exceeded your budget!";
+                } else {
+                    budgetAlert.textContent = "";
+                }
+            }
+
+            // Function to render spend analysis
+            function renderSpendAnalysis(categoryTotals, total) {
+                const spendAnalysisDiv = document.getElementById('spend-analysis');
+                spendAnalysisDiv.innerHTML = '';
+
+                for (const category in categoryTotals) {
+                    const percentage = ((categoryTotals[category] / total) * 100).toFixed(2);
+                    spendAnalysisDiv.innerHTML += `<div class="spend-analysis-item">${category}: ${percentage}%</div>`;
+                }
+            }
+
+            // Function to add item
+            budgetForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const itemName = document.getElementById('budget-item-name').value;
+                const itemCost = parseFloat(document.getElementById('budget-item-cost').value);
+                const itemCategory = document.getElementById('budget-item-category').value;
+
+                if (itemName && itemCost && itemCategory) {
+                    items.push({ name: itemName, cost: itemCost, category: itemCategory });
+                    renderItems();
+                    budgetForm.reset();
+                }
+            });
+
+            // Remove item from the list
+            window.removeItem = function(index) {
+                items.splice(index, 1);
+                renderItems();
+            };
+
+            // Edit item in the list
+            window.editItem = function(index) {
+                const item = items[index];
+                document.getElementById('budget-item-name').value = item.name;
+                document.getElementById('budget-item-cost').value = item.cost;
+                document.getElementById('budget-item-category').value = item.category;
+                removeItem(index);
+            };
+
+            // Load Sample Data
+            loadSampleBtn.addEventListener('click', function() {
+                const sampleData = [
+                    { name: "Venue Rent", cost: 500, category: "Venue" },
+                    { name: "Catering", cost: 300, category: "Food" },
+                    { name: "DJ & Music", cost: 200, category: "Entertainment" },
+                    { name: "Decorations", cost: 150, category: "Decorations" },
+                    { name: "Drinks", cost: 100, category: "Food" }
+                ];
+
+                items = sampleData;
+                renderItems();
+            });
+
+            // Budget limit input event
+            budgetLimitInput.addEventListener('input', function() {
+                budgetLimit = parseFloat(budgetLimitInput.value);
+                checkBudget(parseFloat(totalBudget.textContent));
+            });
+        });
+    </script>
+
+{% endblock content %}

@@ -1,0 +1,175 @@
+{% extends 'base/base2.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+    <!-- Header Section -->
+    <header class="text-center mb-4">
+        <h1>Event Management Marketplace</h1>
+        <p class="lead">Find the best vendors for your events.</p>
+    </header>
+
+    <!-- Vendor Listing Section -->
+    <div class="row">
+        <!-- Card 1 -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4" style="padding: 10px;">
+            <div class="card h-100">
+                <img src="{% static 'img/light.jpg' %}" class="card-img-top" alt="Lighting Services">
+                <div class="card-body">
+                    <h5 class="card-title">Brilliant Lights Co.</h5>
+                    <p class="card-text">Professional lighting for weddings and parties.</p>
+                    <div class="d-flex justify-content-between mt-3">
+                        <button class="btn btn-primary btn-sm">Contact Seller</button>
+                        <!-- Updated button with a link to the download -->
+<button onclick="window.location.href='{% url 'download_quote' %}'" class="btn btn-primary btn-sm">Get Quote</button>
+
+                    </div>
+                </div>
+                <div class="card-hover-details">
+                    <p><strong>Reviews:</strong> 4.5/5 (200 reviews)</p>
+                    <p><strong>Availability:</strong> Available for booking</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4"  style="padding: 10px;">
+            <div class="card h-100">
+                <img src="{% static 'img/wedding.jpeg' %}" class="card-img-top" alt="Decorations">
+                <div class="card-body">
+                    <h5 class="card-title">Elegant Decorations</h5>
+                    <p class="card-text">Beautiful decorations to bring your events to life.</p>
+                    <div class="d-flex justify-content-between mt-3">
+                        <button class="btn btn-primary btn-sm">Contact Seller</button>
+                        <button onclick="window.location.href='{% url 'download_quote' %}'" class="btn btn-primary btn-sm">Get Quote</button>
+                    </div>
+                </div>
+                <div class="card-hover-details">
+                    <p><strong>Reviews:</strong> 4.7/5 (150 reviews)</p>
+                    <p><strong>Availability:</strong> Limited availability</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4"  style="padding: 10px;">
+            <div class="card h-100">
+                <img src="{% static 'img/caters.jpeg' %}" class="card-img-top" alt="Catering Services">
+                <div class="card-body">
+                    <h5 class="card-title">Delicious Bites Catering</h5>
+                    <p class="card-text">Delicious food for your special occasions.</p>
+                    <div class="d-flex justify-content-between mt-3">
+                        <button class="btn btn-primary btn-sm">Contact Seller</button>
+                        <button onclick="window.location.href='{% url 'download_quote' %}'" class="btn btn-primary btn-sm">Get Quote</button>
+                    </div>
+                </div>
+                <div class="card-hover-details">
+                    <p><strong>Reviews:</strong> 4.8/5 (320 reviews)</p>
+                    <p><strong>Availability:</strong> Fully booked this month</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom styles for cards */
+    .row {
+        padding: 20px;
+    }
+
+    .card {
+        border: solid 1px black;
+        border-radius: 20px;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Card Image Styling */
+    .card-img-top {
+        border-radius: 20px;
+        height: 200px;
+        padding: 10px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 10px;
+        z-index: 2; /* Ensure buttons are clickable */
+        position: relative;
+    }
+
+    /* Hover Details */
+    .card-hover-details {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+        padding: 20px;
+        text-align: center;
+        border-radius: 20px;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .card:hover .card-hover-details {
+        opacity: 1;
+    }
+
+    /* Header Section */
+    header {
+        background: linear-gradient(45deg, var(--blue), var(--light-blue));
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+    }
+
+    /* Button Styling */
+    .btn-primary {
+        padding: 5px;
+        background-color:var(--blue);
+        border-color:var(--light-blue);
+        color: white;
+        transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        z-index: 3; /* Ensure buttons are above hover details */
+    }
+
+    .btn-primary:hover {
+        background-color: #2575fc;
+        transform: scale(1.05);
+        border-color: #2575fc;
+    }
+
+    /* Footer Styling */
+    footer {
+        background: #333;
+        color: #bbb;
+    }
+
+    /* Responsiveness Tweaks */
+    @media (max-width: 576px) {
+        header {
+            font-size: 1.2rem;
+            padding: 1.5rem;
+        }
+
+        .card {
+            margin-bottom: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}

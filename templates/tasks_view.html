@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Navigation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+        }
+        .box {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .box:hover {
+            transform: scale(1.05);
+        }
+        .button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="box">
+            <h2>Create Task</h2>
+            <p>Click the button below to create a new task.</p>
+            <a href="{% url 'create-task' event.id %}" class="button">Create Task</a>
+        </div>
+
+        <div class="box">
+            <h2>View Tasks</h2>
+            <p>Click the button below to view existing tasks.</p>
+            <a href="{% url 'event-tasks' event.id %}" class="button">View Tasks</a>
+        </div>
+    </div>
+
+</body>
+</html>

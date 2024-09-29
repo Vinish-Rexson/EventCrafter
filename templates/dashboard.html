@@ -1,0 +1,306 @@
+{% extends 'base/base2.html' %}
+{% block title %}Dashboard{% endblock title %}
+{% block breadcrumb %}Dashboard{% endblock breadcrumb %}
+{% block content %}
+{% load static %}
+
+<div class="head-title">
+  <div class="left">
+      <h1>Dashboard</h1>
+      <ul class="breadcrumb">
+          <li>
+              <a href="#">Dashboard</a>
+          </li>
+          <li><i class='bx bx-chevron-right'></i></li>
+          <li>
+              <a class="active" href="#">Home</a>
+          </li>
+      </ul>
+  </div>
+  <a href="#" class="btn-download">
+      <i class='bx bxs-cloud-download'></i>
+      <span class="text">Download PDF</span>
+  </a>
+</div>
+
+<ul class="box-info">
+  <li><a href="{% url 'event-category-list' %}" style="color: inherit;" class="small-box-footer">
+      <i class='bx bxs-calendar-check'></i>
+      <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box bg-info">
+        <div class="inner">
+          {% if event_ctg %}
+            <h3>{{ event_ctg }}</h3>
+          {% else %}
+            <h3>0</h3>
+          {% endif %}
+
+          <p>Category</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-bag"></i>
+        </div>
+      </a>
+      
+    </div>
+  </li>
+
+  <li>
+    <a href="{% url 'event-list' %}" style="color: inherit;" class="small-box-footer">
+      <i class='bx bxs-group'></i>
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+          <div class="inner">
+            {% if event %}
+              <h3>{{ event }}</h3>
+            {% else %}
+              <h3>0</h3>
+            {% endif %}
+  
+            <p>Events</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+         
+        </div>
+      </a>
+      </div>
+    
+  </li>
+  
+  <li>
+    <a href="{% url 'join-event-list' %}" style="color: inherit;">
+      <i class='bx bxs-group'></i>
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+          <div class="inner">
+            {% if user %}
+              <h3>{{ user }}</h3>
+            {% else %}
+              <h3>0</h3>
+            {% endif %}
+  
+            <p>Participants</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-person-add"></i>
+          </div>
+          
+        </div>
+      </a>
+      </div>
+    
+  </li>
+  <li>
+    <a href="{% url 'complete-event' %}" class="small-box-footer" style="color: inherit;">
+      <i class='bx bxs-group'></i>
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box bg-danger">
+        <div class="inner">
+          {% if complete_event %}
+            <h3>{{ complete_event }}</h3>
+          {% else %}
+          <h3>0</h3>
+          {% endif %}
+
+          <p>Completed Event</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-pie-graph"></i>
+        </div>
+        
+      </div>
+    </a>
+    </div>
+</li>
+</ul>
+  
+  <!-- Event List -->
+  <div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-5">
+                      
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Event List</title>
+                    <style>
+                        /* Basic Table Styling */
+                        .styled-table {
+                            border-collapse: collapse;
+                            margin: 25px 0;
+                            font-size: 18px;
+                            font-family: 'Arial', sans-serif;
+                            width: 100%;
+                            text-align: left;
+                        }
+
+                        .styled-table thead tr {
+                            background-color:var(--blue);
+                            color: #ffffff;
+                            text-align: left;
+                            font-weight: bold;
+                        }
+
+                        .styled-table th,
+                        .styled-table td {
+                            padding: 12px 15px;
+                            border: 1px solid #dddddd;
+                        }
+
+                        .styled-table tbody tr {
+                            border-bottom: 1px solid #dddddd;
+                        }
+
+                        .styled-table tbody tr:nth-of-type(even) {
+                            background-color: #f3f3f3;
+                        }
+
+                        .styled-table tbody tr:last-of-type {
+                            border-bottom: 2px solid var(--blue);
+                        }
+
+                        .styled-table tbody tr:hover {
+                            background-color: #f1f1f1;
+                        }
+
+                        .status {
+                            font-weight: bold;
+                            padding: 5px;
+                            border-radius: 5px;
+                        }
+
+                        .status.active {
+                            color: white;
+                            background-color: green;
+                        }
+
+                        .status.completed {
+                            color: white;
+                            background-color: blue;
+                        }
+
+                        .status.pending {
+                            color: white;
+                            background-color: red;
+                        }
+
+                        a {
+                            text-decoration: none;
+                            color: #009879;
+                        }
+
+                        a:hover {
+                            text-decoration: underline;
+                        }
+
+                        /* Responsive Table */
+                        .table-responsive {
+                            overflow-x: auto;
+                        }
+
+                        @media (max-width: 768px) {
+                            .styled-table thead {
+                                display: none;
+                            }
+
+                            .styled-table, .styled-table tbody, .styled-table tr, .styled-table td {
+                                display: block;
+                                width: 100%;
+                            }
+
+                            .styled-table tr {
+                                margin-bottom: 15px;
+                                border-bottom: 1px solid #ddd;
+                            }
+
+                            .styled-table td {
+                                text-align: right;
+                                padding-left: 50%;
+                                position: relative;
+                            }
+
+                            .styled-table td::before {
+                                content: attr(data-label);
+                                position: absolute;
+                                left: 0;
+                                width: 50%;
+                                padding-left: 15px;
+                                font-weight: bold;
+                                text-align: left;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+
+                <h1 style="padding-top: 20px;">Event List</h1>
+                <div class="table-responsive">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Venue</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in events %}
+                            <tr>
+                                <td data-label="#"> {{ forloop.counter }}</td>
+                                <td data-label="Name">{{ event.name|capfirst }}</td>
+                                <td data-label="Category">{{ event.category }}</td>
+                                <td data-label="Start Date">{{ event.start_date }}</td>
+                                <td data-label="End Date">{{ event.end_date }}</td>
+                                <td data-label="Venue">{{ event.venue|capfirst }}</td>
+                                <td data-label="Status">
+                                    {% if event.status == 'active' %}
+                                    <span class="status active">{{ event.status|title }}</span>
+                                    {% elif event.status == 'completed' %}
+                                    <span class="status completed">{{ event.status|title }}</span>
+                                    {% else %}
+                                    <span class="status pending">{{ event.status|title }}</span>
+                                    {% endif %}
+                                </td>
+                                <td data-label="Actions">
+                                    <a href="{% url 'event-detail' event.pk %}" title="view">View</a> | 
+                                    <a href="{% url 'event-edit' event.pk %}" title="edit">Edit</a> | 
+                                    <a href="{% url 'event-delete' event.pk %}" title="delete">Delete</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8">No events available.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                </body>
+                </html>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

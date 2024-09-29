@@ -1,0 +1,55 @@
+{% extends 'base/base2.html' %}
+
+{% block title %}Event List{% endblock %}
+
+{% block content %}
+<style>
+    #event-list-container {
+        font-family: Arial, sans-serif; 
+        background-color: #f4f4f4;
+        padding: 20px;
+    }
+    #event-list-container .event-container {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    #event-list-container h2 {
+        margin-top: 0;
+    }
+    #event-list-container .button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+    }
+    #event-list-container .button:hover {
+        background-color: #0056b3;
+    }
+</style>
+    <div id="event-list-container" class="container">
+        <h1>Event List</h1>
+        
+        {% for event in events %}
+        <div class="event-container">
+            <h2>{{ event.name }}</h2>
+            <p><strong>Description:</strong> {{ event.description }}</p>
+            <p><strong>Start Date:</strong> {{ event.start_date }}</p>
+            <p><strong>Status:</strong> {{ event.status }}</p>
+            
+            <a href="{% url 'event-detail' event.id %}" class="button">View Details</a>
+            <a href="{% url 'event-tasks' event.id %}" class="button">View Tasks</a>
+        </div>
+        {% empty %}
+        <p>No events available.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

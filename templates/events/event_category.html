@@ -1,0 +1,306 @@
+{% extends 'base/base2.html' %}
+{% block title %}Event Category List{% endblock title %}
+{% block breadcrumb %}Event Category List{% endblock breadcrumb %}
+
+{% block content %}
+<div class="head-title">
+    <div class="left">
+        <h1>Dashboard</h1>
+        <ul class="breadcrumb">
+            <li>
+                <a href="#">Dashboard</a>
+            </li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li>
+                <a class="active" href="/events/event_catogery/">Event Catogery</a>
+            </li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li>
+                <a class="active" href="/events/event_catogery/">Catogery List</a>
+            </li>
+        </ul>
+    </div>
+  </div>
+<style>
+    /* Scoped CSS for Event Category List */
+    .custom-event-category-list .card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+
+    .custom-event-category-list .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .custom-event-category-list h5 {
+        font-size: 18px;
+        color: #333;
+        margin: 0;
+    }
+
+    .custom-event-category-list .actions {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Space between actions */
+    }
+
+    .custom-event-category-list .form-inline {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Space between the search bar and button */
+    }
+
+    .custom-event-category-list .form-control-navbar {
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        padding: 8px;
+        width: auto;
+        min-width: 200px; /* Set a minimum width for the search bar */
+    }
+
+    .custom-event-category-list .btn {
+        margin: 0;
+        background-color: var(--blue);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-event-category-list .btn:hover {
+        background-color: #218838;
+    }
+
+    .custom-event-category-list .btn-primary {
+        background-color: #007bff;
+    }
+
+    .custom-event-category-list .btn-info {
+        background-color: #17a2b8;
+    }
+
+    .custom-event-category-list .btn-danger {
+        background-color: #dc3545;
+    }
+
+    .custom-event-category-list .table {
+        width: 100%; /* Full width */
+        border-collapse: collapse !important;
+        margin-top: 20px;
+        overflow-x: auto; /* Enable horizontal scrolling */
+    }
+
+    .custom-event-category-list .table th,
+    .custom-event-category-list .table td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #dee2e6;
+    }
+
+    .custom-event-category-list .table th {
+        background-color: #f1f1f1;
+    }
+
+    .custom-event-category-list .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .custom-event-category-list .input-group .input-group-append .btn {
+        background-color: #6c757d;
+        border: none;
+        color: #fff;
+    }
+
+    .custom-event-category-list .input-group .input-group-append .btn:hover {
+        background-color: #5a6268;
+    }
+
+    /* Spacing for action buttons */
+    .custom-event-category-list .action-buttons a {
+        margin-right: 10px; /* Space between action buttons */
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .custom-event-category-list .card-header {
+            flex-direction: column; /* Stack items on smaller screens */
+            align-items: flex-start; /* Align to start */
+        }
+
+        .custom-event-category-list .form-inline {
+            flex-direction: row; /* Keep form in a single line */
+            width: 100%; /* Full width */
+        }
+
+        .custom-event-category-list .form-control-navbar {
+            width: auto; /* Adjust width */
+        }
+    }
+
+
+    .custom-event-category-list .actions {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Space between actions */
+    }
+    
+    .custom-event-category-list .action-buttons a {
+        margin-right: 5px; /* Adjust spacing between buttons */
+        padding: 8px; /* Increase padding for better button visibility */
+        display: inline-block;
+        text-align: center;
+        min-width: 40px; /* Set minimum width for each button to avoid overlap */
+    }
+    
+    .custom-event-category-list .btn {
+        margin: 0;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+    
+    .custom-event-category-list .btn-primary {
+        background-color: #007bff;
+    }
+    
+    .custom-event-category-list .btn-primary:hover {
+        background-color: #0056b3;
+    }
+    
+    .custom-event-category-list .btn-info {
+        background-color: #17a2b8;
+    }
+    
+    .custom-event-category-list .btn-info:hover {
+        background-color: #117a8b;
+    }
+    
+    .custom-event-category-list .btn-danger {
+        background-color: #dc3545;
+    }
+    
+    .custom-event-category-list .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+</style>
+
+<div class="custom-event-category-list">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Event Category List</h5>
+                    <div class="actions">
+                        <form class="form-inline" action="{% url 'search-event-category' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-navbar" name="search" type="search"
+                                    placeholder="Search" aria-label="Search">
+                                    
+                                        <i class="fas fa-search" style="background-color: #707070; padding: 6px; border-radius: 10px;" ></i>
+                                   
+                                <div class="input-group-append">
+                                    
+                                </div>
+                            </div>
+                        </form>
+                        <a class="btn btn-success" href="{% url 'create-event-category' %}">Create New Category</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-bordered datatable dataTable no-footer" id="DataTables_Table_0"
+                        role="grid" aria-describedby="DataTables_Table_0_info">
+                        <thead>
+                            <tr role="row">
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Code</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in event_categories %}
+                              <tr>
+                                  <td>{{ forloop.counter }}</td>
+                                  <td>{{ category.name }}</td>
+                                  <td>{{ category.code }}</td>
+                                  <td>{{ category.status }}</td>
+                                  <td>
+                                      <a class="btn btn-info" href="{% url 'edit-event-category' category.pk %}">
+                                          <i class="fa fa-edit"></i>
+                                      </a>
+                                      <a class="btn btn-danger" href="{% url 'delete-event-category' category.pk %}">
+                                          <i class="fa fa-trash"></i>
+                                      </a>
+                                      <a class="btn btn-primary" href="{% url 'generate_qr_code' category.pk %}">
+                                          <i class="fa fa-link"></i>
+                                      </a>
+                                      <a class="btn btn-primary" href="{% url 'upload_photo'  %}">
+                                        <i class='bx bxs-hdd'></i>
+                                    </a>
+                                      
+                                  </td>
+                              </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extrascript %}
+<script>
+    // Get the elements with class="column"
+    var elements = document.getElementsByClassName("table");
+    var myobj = document.getElementsByClassName("ctg_image");
+    // Declare a loop variable
+    var i;
+
+    // List View
+    function listView() {
+        for (i = 0; i < elements.length; i++) {
+            var appBanners = document.getElementsByClassName('ctg_image');
+
+            for (var i = 0; i < appBanners.length; i++) {
+                appBanners[i].style.display = 'none';
+            }
+        }
+    }
+
+    // Grid View
+    function gridView() {
+        for (i = 0; i < elements.length; i++) {
+            var appBanners = document.getElementsByClassName('ctg_image');
+
+            for (var i = 0; i < appBanners.length; i++) {
+                appBanners[i].style.display = 'block';
+            }
+        }
+    }
+
+    /* Optional: Add active class to the current button (highlight it) */
+    var container = document.getElementById("btnContainer");
+    var btns = container.getElementsByClassName("btn");
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function () {
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+        });
+    }
+</script>
+{% endblock extrascript %}

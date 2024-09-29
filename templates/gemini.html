@@ -1,0 +1,151 @@
+{% extends 'base/base2.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+       
+.chat-container {
+    background: #fff;
+    width: 90%; /* Adjusted for responsiveness */
+    max-width: 800px; /* Maintain max width */
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    margin: 20px; /* Add margin to prevent hitting screen edges */
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+    color: #4a4a4a;
+}
+
+
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px; /* Space between inputs */
+    font-size: 14px;
+}
+
+.button1 {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background: #007bff;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.button1:hover {
+    background: #0056b3;
+}
+
+.response-container {
+    margin-top: 20px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.response-container .message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    background: #f1f1f1;
+    color: #555;
+}
+
+.response-container .message strong {
+    color: #007bff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chat-container {
+        width: 95%; /* More width on smaller screens */
+        margin: 10px; /* Reduce margin */
+    }
+
+    .button1 {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    textarea {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h1><b>Event Planner Ai</b></h1>
+        <div class="response-container">
+            {% if response %}
+            <div id="responseMessage" class="message bot">
+                <p>{{ response }}</p>
+            </div>
+            {% else %}
+            <div class="message bot" >
+                <p>No messages yet. Start chatting!</p>
+            </div>
+            {% endif %}
+        </div>
+        <form method="POST" style=" display: flex;
+        flex-direction: column; 
+        margin-top: auto;">
+            {% csrf_token %}
+            <input type="text" id="event_name" name="event_name" placeholder="Event Name" required>
+            <input type="date" id="event_date" name="event_date" required>
+            <input type="text" id="event_location" name="event_location" placeholder="Event Location" required>
+            <input type="number" id="event_budget" name="event_budget" placeholder="Budget" required>
+            <textarea id="special_requirements" name="special_requirements" placeholder="Special Requirements"></textarea>
+            <button class="button1" type="submit">Plan Event</button>
+        </form>
+        
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const responseElement = document.getElementById("responseMessage");
+            if (responseElement) {
+                let responseText = responseElement.innerText;
+
+                // Format bold text
+                responseText = responseText.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+                // Ensure new line for each main point
+                responseText = responseText.replace(/(\d+\.\s.*?)(?=\d+\.\s|$)/gs, "<p>$1</p>");
+                
+                // Format sub-points
+                responseText = responseText.replace(/(\*\s.*?)(?=\*\s|$)/gs, "<p>$1</p>");
+                
+                // Apply formatted text to response element
+                responseElement.innerHTML = responseText;
+            }
+        });
+    </script>
+
+{% endblock content %}

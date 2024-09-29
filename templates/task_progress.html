@@ -1,0 +1,184 @@
+{% extends 'base/base2.html' %}
+{% load static %}
+{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .dashboard h1,
+        .dashboard h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .dashboard .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 90vw; /* Max width relative to viewport width */
+        }
+
+        .dashboard .chart-container canvas {
+            width: 100%;
+            max-width: 600px; /* Adjust max width of charts */
+            border: 2px solid #4bc0c0;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+
+        .dashboard .tasks-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px; /* Limit the width for better responsiveness */
+            margin: 0 auto;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .dashboard .tasks-section div {
+            text-align: center;
+        }
+
+        .dashboard .tasks-section img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard h1 {
+                font-size: 1.5rem;
+            }
+
+            .dashboard .chart-container canvas {
+                max-width: 90vw; /* Ensure charts are responsive on smaller screens */
+            }
+        }
+    </style>
+
+    <div class="dashboard">
+        <div class="chart-container">
+            <h1>Event Registration Statistics</h1>
+            <canvas id="registrationChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h1>Event Attendance Over Time</h1>
+            <canvas id="attendanceChart"></canvas>
+        </div>
+
+        <h1>Task Progress</h1>
+
+        <div class="tasks-section">
+            <div>
+                <h2>Task Completion Over Time</h2>
+                <img src="{% static 'images/task_completion_over_time.png' %}" alt="Task Completion Over Time">
+            </div>
+            <div>
+                <h2>Task Distribution by Assigned User</h2>
+                <img src="{% static 'images/task_distribution_donut_chart.png' %}" alt="Task Distribution by Assigned User">
+            </div>
+            <div>
+                <h2>Tasks Assigned to Users</h2>
+                <img src="{% static 'images/tasks_assigned_bar_chart.png' %}" alt="Tasks Assigned to Users">
+            </div>
+            <div>
+                <h2>Task Completion Rate by User</h2>
+                <img src="{% static 'images/task_completion_rate_horizontal.png' %}" alt="Task Completion Rate by User">
+            </div>
+            <div>
+                <h2>Tasks Over Time</h2>
+                <img src="{% static 'images/tasks_over_time_area_chart.png' %}" alt="Tasks Over Time">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Event Registration Chart
+        const ctx = document.getElementById('registrationChart').getContext('2d');
+        const registrationChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ event_names|safe }},
+                datasets: [{
+                    label: 'Number of Registrations',
+                    data: {{ registrations|safe }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                    ],
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                    x: {}
+                }
+            }
+        });
+
+        // Event Attendance Chart
+        const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+        const attendanceChart = new Chart(attendanceCtx, {
+            type: 'line',
+            data: {
+                labels: {{ days|safe }},
+                datasets: [{
+                    label: 'Attendance Over Time',
+                    data: {{ attendance_over_time|safe }},
+                    fill: false,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    tension: 0.1,
+                    pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Attendees',
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Days',
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}

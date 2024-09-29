@@ -1,0 +1,114 @@
+{% extends 'base/base2.html' %}
+
+{% block title %}Create Event Category{% endblock title %}
+{% block breadcrumb %}Create Event Category{% endblock breadcrumb %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+    /* Scoped Form Styles */
+    .custom-form-container {
+        padding: 25px;
+        background-color: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .custom-form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .custom-form-header h5 {
+        margin: 0;
+        font-size: 20px;
+        color: #333;
+    }
+
+    .custom-form-header .btn {
+        background-color:var(--blue);
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        font-size: 14px;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-form-header .btn:hover {
+        background-color: var(--light-blue);
+    }
+
+    .custom-form-container .form-control {
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .custom-form-container .form-control:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+        outline: none;
+    }
+
+    .custom-form-container button[type="submit"] {
+        background-color:var(--blue);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        margin-top: 15px;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
+
+    .custom-form-container button[type="submit"]:hover {
+        background-color:var(--light-blue);
+    }
+</style>
+
+<div class="head-title">
+    <div class="left">
+        <h1>Dashboard</h1>
+        <ul class="breadcrumb">
+            <li>
+                <a href="#">Dashboard</a>
+            </li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li>
+                <a class="active" href="/events/event_catogery/">Event catogery</a>
+            </li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li>
+                <a class="active" href="#">Create event catogery</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <form class="custom-form-container" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="custom-form-header">
+                        <h5>Create Event Category</h5>
+                        <a class="btn" href="{% url 'event-category-list' %}">Category List</a>
+                    </div>
+                    {{ form|crispy }}
+                    <button class="btn btn-success ml-2" type="submit">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

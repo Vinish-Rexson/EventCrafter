@@ -1,0 +1,161 @@
+{% extends 'base/base2.html' %}
+{% block title %}Event List{% endblock title %}
+{% block breadcrumb %}Event List{% endblock breadcrumb %}
+
+{% block content %}
+
+
+<style>
+    /* Container Styling for Search and Button */
+    .search-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px; /* Space below the container */
+    }
+
+    /* Form Input Styling */
+    .search-container form {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-container input[type="search"] {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+    }
+
+    .search-container button {
+        padding: 10px 20px;
+        margin-left: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .search-container button:hover {
+        background-color: #0056b3; /* Darker shade on hover */
+    }
+
+    /* Create Button Styling */
+    .create-button {
+        padding: 10px 20px;
+        background-color: #28a745; /* Success color for create button */
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .create-button:hover {
+        background-color: #218838; /* Darker shade on hover */
+    }
+
+    /* Table Styling */
+    table {
+        width: 100%; /* Full width */
+        border-collapse: collapse; /* Merge borders */
+        margin: 20px 0; /* Space around the table */
+        font-size: 16px; /* Font size */
+    }
+
+    /* Table Header Styling */
+    thead {
+        background-color: #f2f2f2; /* Light gray background for header */
+    }
+
+    th, td {
+        padding: 10px; /* Padding for cells */
+        text-align: left; /* Align text to the left */
+        border: 1px solid #ddd; /* Light gray border */
+    }
+
+    /* Row Hover Effect */
+    tr:hover {
+        background-color: #f5f5f5; /* Slightly darker gray on hover */
+    }
+
+    /* Action Links Styling */
+    a {
+        text-decoration: none; /* Remove underline */
+        color: #007bff; /* Bootstrap primary color */
+    }
+
+    a:hover {
+        text-decoration: underline; /* Underline on hover */
+    }
+</style>
+
+<h5>Event List</h5>
+
+<div class="search-container">
+    <form action="{% url 'search-event' %}" method="POST">
+        {% csrf_token %}
+        <input name="search" type="search" placeholder="Search" aria-label="Search">
+        <button type="submit">Search</button>
+    </form>
+    <a href="{% url 'event-create' %}" class="create-button">Create New Event</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Image</th>
+            <th>Status</th>
+            <th>Assigned User</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ event.name }}</td>
+                <td>{{ event.category }}</td>
+                <td>
+                    {% if event.eventimage %}
+                        <img src="{{ event.eventimage.image.url }}" alt="Image" height="100" width="100">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'update-event-status' event.id %}">{{ event.status|title }}</a>
+                </td>
+                <td>{{ event.user.username }}</td>
+                <td>
+                    <a href="{% url 'event-detail' event.pk %}">View</a>
+                    <a href="{% url 'event-edit' event.pk %}">Edit</a>
+                    <a href="{% url 'event-delete' event.pk %}">Delete</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7">No events found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
+
+{% block extrascript %}
+<script>
+    function listView() {
+        // Functionality for list view
+    }
+    
+    function gridView() {
+        // Functionality for grid view
+    }
+</script>
+{% endblock extrascript %}

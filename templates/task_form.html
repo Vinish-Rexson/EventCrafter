@@ -1,0 +1,121 @@
+{% extends 'base/base2.html' %}
+
+{% block title %}Event List{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin: 10px 0 5px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    input, select, textarea {
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    input[type="datetime-local"] {
+        background-color: #fff;
+    }
+
+    button {
+        padding: 10px 15px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    .cancel-btn {
+        margin-top: 10px;
+        text-align: center;
+        display: block;
+        color: #666;
+        text-decoration: none;
+    }
+
+    .cancel-btn:hover {
+        text-decoration: underline;
+    }
+</style>
+<div class="container">
+    <h1>Create Task for {{ event.name }}</h1>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Render form fields using Django's form rendering -->
+        <div>
+            {{ form.task_name.label_tag }}
+            {{ form.task_name }}
+        </div>
+        
+        <div>
+            {{ form.description.label_tag }}
+            {{ form.description }}
+        </div>
+
+        <!-- Dropdown for selecting the assigned person -->
+        <div>
+            {{ form.assigned_person.label_tag }}
+            {{ form.assigned_person }}
+        </div>
+
+        <!-- Required datetime fields -->
+        <div>
+            <label for="start_datetime">Start Date & Time (Required):</label>
+            <input type="datetime-local" name="start_datetime" required>
+        </div>
+
+        <div>
+            <label for="end_datetime">End Date & Time (Required):</label>
+            <input type="datetime-local" name="end_datetime" required>
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit">Create Task</button>
+    </form>
+
+    <!-- Cancel button to go back to task list -->
+    <a href="{% url 'event-tasks' event.id %}" class="cancel-btn">Cancel</a>
+</div>
+
+{% endblock %}

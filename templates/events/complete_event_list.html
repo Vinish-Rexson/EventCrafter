@@ -1,0 +1,98 @@
+{% extends 'base/base2.html' %}
+{% block title %}Completed Event List{% endblock title %}
+{% block breadcrumb %}Completed Event List{% endblock breadcrumb %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Completed Event List</h5>
+                    <a class="btn btn-success btn-sm" href="{% url 'event-create' %}">Create Event</a>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered event-table">
+                        <thead>                  
+                          <tr>
+                            <th style="width: 10px">#</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in events %}
+                                <tr role="row">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <a href="{% url 'event-detail' event.id %}">{{ event.name }}</a>
+                                    </td>
+                                    <td>{{ event.category }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Styles specifically for the event table */
+        .event-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        .event-table th, .event-table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+
+        .event-table th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .event-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .event-table a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .event-table a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive styling */
+        @media (max-width: 768px) {
+            .event-table {
+                font-size: 14px;
+            }
+        }
+
+        /* Style adjustments for header and button alignment */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-success {
+            padding: 6px 12px;
+            font-size: 14px;
+            background-color: var(--blue);
+            border-radius: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #28a745;
+        }
+    </style>
+{% endblock content %}

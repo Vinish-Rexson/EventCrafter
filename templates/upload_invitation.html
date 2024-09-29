@@ -1,0 +1,99 @@
+{% extends 'base/base2.html' %}
+
+{% block title %}Upload Invitations{% endblock %}
+
+{% block content %}
+<div class="upload-invitations">
+    <style>
+        /* Custom styles specific to the upload invitations page */
+        .upload-invitations .upload-title {
+            margin-bottom: 20px;
+        }
+    
+        .upload-invitations .upload-title h1 {
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+    
+        .upload-invitations form {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        .upload-invitations label {
+            font-weight: bold;
+        }
+    
+        .upload-invitations input[type="file"],
+        .upload-invitations input[type="text"],
+        .upload-invitations textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    
+        .upload-invitations input[type="submit"],
+        .upload-invitations .download-button {
+            background: var(--blue);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+            margin-top: 20px;
+            transition: background-color 0.3s; /* Smooth transition */
+        }
+    
+        .upload-invitations input[type="submit"]:hover,
+        .upload-invitations .download-button:hover {
+            background: var(--dark-blue); /* Change to your desired hover color */
+        }
+    
+        .upload-invitations input[type="submit"]:hover {
+            background: #28a745; /* Example hover color for the "Send Invitations" button */
+        }
+    
+        .upload-invitations .download-button:hover {
+            background: #28a745; /* Example hover color for the "Download" button */
+        }
+    </style>
+    
+
+    <div class="upload-title">
+        <h1>Upload Invitations</h1>
+    </div>
+    <a href="{% url 'download_excel_template' %}" class="download-button">Download Standard Template</a>
+    <script>
+        window.onload = function() {
+            if (confirm("Would you like to download the standard Excel template for invitations?")) {
+                window.location.href = "{% url 'download_excel_template' %}";
+            }
+        };
+    </script>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="excel_file">Excel File:</label>
+        <input type="file" name="excel_file" required><br>
+
+        <label for="invitation_file">Invitation PDF/Image:</label>
+        <input type="file" name="invitation_file" required><br>
+
+        <label for="email_subject">Email Subject:</label>
+        <input type="text" name="email_subject" required><br>
+
+        <label for="email_body">Email Body:</label>
+        <textarea name="email_body" rows="8" cols="50" required></textarea>
+        <strong>Use placeholders like {guest_name}, {invitation_date}, {time}, and {venue} for dynamic content.</strong><br>
+
+        <input type="submit" value="Send Invitations">
+    </form>
+</div>
+{% endblock %}

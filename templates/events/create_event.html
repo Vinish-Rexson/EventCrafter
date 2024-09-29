@@ -1,0 +1,126 @@
+{% extends 'base/base2.html' %}
+{% block title %}Create Event{% endblock title %}
+{% block breadcrumb %}Create Event{% endblock breadcrumb %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+    /* General Container Styling */
+    .container {
+        margin-top: 20px;
+    }
+
+    /* Card Styling */
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px; 
+    }
+
+    .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        padding: 15px;
+    }
+
+    h5 {
+        font-size: 1.5rem;
+        margin-top: 10px;
+    }
+
+    /* Button Group Styling */
+    .button-group {
+        display: flex;
+        justify-content: space-between; /* Space between buttons */
+        margin-bottom: 20px; /* Space below button group */
+    }
+
+    .btn-success {
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: #28a745;
+        border: none;
+        color: white;
+        transition: background-color 0.3s;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    /* Form Styling */
+    .form {
+        margin-top: 20px; 
+    }
+
+    .form-group {
+        margin-bottom: 20px; 
+    }
+
+    .form-control {
+        padding: 12px;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 5px rgba(128, 189, 255, 0.5);
+        outline: none;
+    }
+
+    .form-control::placeholder {
+        color: #adb5bd;
+        opacity: 1;
+    }
+
+    /* Location Map Styling */
+  
+
+    /* Responsive Styling */
+    @media (max-width: 768px) {
+        .btn-success {
+            width: 100%; /* Full-width button on small screens */
+        }
+    }
+    
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="button-group">
+                        <h5>Create Event</h5>
+                        <a class="btn btn-success" href="{% url 'event-list' %}">Event List</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form|crispy }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_1|crispy }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_2|crispy }}
+                        </div>
+                        <button class="btn btn-success" type="submit">Create Event</button>
+                    </form>
+                    <div id="location-field-map" class="location-map"></div>
+                    {{ form.media }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css' rel='stylesheet' />
+
+{% endblock content %}

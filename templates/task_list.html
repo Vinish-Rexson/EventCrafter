@@ -1,0 +1,75 @@
+{% extends 'base/base2.html' %}
+
+{% block title %}Event List{% endblock %}
+
+{% block content %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .button {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+</style>
+<h1>Tasks for {{ event.name }}</h1>
+<a href="{% url 'create-task' event.id %}" class="button">Create Task</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Task Name</th>
+            <th>Description</th>
+            <th>Assigned To</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Completed</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.task_name }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.assigned_person }}</td>
+            <td>{{ task.start_datetime }}</td>
+            <td>{{ task.end_datetime }}</td>
+            <form method="POST" action="{% url 'update-task' task.id %}">
+                {% csrf_token %}
+            <td>
+                <input type="checkbox" name="completed" {% if task.completed %}checked{% endif %}>
+            </td>
+            <td>
+                <button type="submit">Update</button>
+            </form>
+            </td>
+            <td>
+                <!-- Add any extra actions like editing or deleting the task -->
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7">No tasks available for this event.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

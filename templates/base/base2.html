@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mentor_dashboard.css' %}">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #google_translate_element {
+            display: none; /* Hide the widget initially */
+        }
+        @import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap");
+    </style>
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+  
+<section id="sidebar">
+    <a href="#" class="brand">
+        <i class='bx bxs-smile'></i>
+        <span class="text">EventCrafter</span>
+    </a>
+    <ul class="side-menu top">
+        <li class="{% if request.path == '/dashboard/' %}active{% endif %}">
+            <a href="{% url 'dashboard' %}" class="nav-link">
+                <i class='bx bxs-dashboard'></i>
+                <span class="text">Dashboard</span>
+            </a>
+        </li>
+        
+        <!-- Use 'startswith' check for student details to include sub-tabs -->
+        <li class="{% if '/events/event_catogery' in request.path %}active{% endif %}{% if '/events/category-list/' in request.path %}active{% endif %}{% if '/events/create-category/' in request.path %}active{% endif %}">
+            <a href="/events/event_catogery/">
+                <i class='bx bxs-group'></i>
+                <span class="text">Event Category</span>
+            </a>
+        </li>
+        
+        
+        
+        <li class="{% if '/events/events_dashboard' in request.path %}active{% endif %}{% if '/events/complete-event/' in request.path %}active{% endif %}{% if '/events/join-event-list/' in request.path %}active{% endif %}{% if '/events/event-list/' in request.path %}active{% endif %}{% if '/events/event-create' in request.path %}active{% endif %}">
+            <a href="/events/events_dashboard/">
+                <i class='bx bxs-message-dots'></i>
+                <span class="text">Events</span>
+            </a>
+        </li>
+        <li class="{% if '/events/events/' in request.path %}active{% endif %}">
+            <a href="/events/events/">
+                <i class='bx bxs-message-dots'></i>
+                <span class="text">Tasks</span>
+            </a>
+        </li>
+        <li class="{% if '/events/gemini' in request.path %}active{% endif %}">
+            <a href="/events/gemini/">
+                <i class='bx bxs-brain'></i>
+                <span class="text">Event Planner Ai</span>
+            </a>
+        </li>
+        <li class="{% if '/events/group_discussion' in request.path %}active{% endif %}">
+            <a href="/events/group_discussion/">
+                <i class='bx bxs-conversation'></i>
+                <span class="text">Group Discussion</span>
+            </a>
+        </li>
+        <li class="{% if '/events/vendor' in request.path %}active{% endif %}">
+            <a href="/events/vendor/">
+                <i class='bx bxs-store-alt' ></i>
+                <span class="text">Vendor's marketplace</span>
+            </a>
+        </li>
+        <li class="{% if '/events/budget/' in request.path %}active{% endif %}">
+            <a href="/events/budget/">
+                <i class='bx bx-money' ></i>
+                <span class="text">Budget Tracker</span>
+            </a>
+        </li>
+        
+        <li class="{% if 'events/tasks/progress/' in request.path %}active{% endif %}">
+            <a href="/events/progress/">
+                <i class='bx bxl-product-hunt' ></i>
+                <span class="text">Progress Hub</span>
+            </a>
+        </li>
+        
+        <li class="{% if '/events/upload_invitation/' in request.path %}active{% endif %}">
+            <a href="/events/upload_invitation/">
+                <i class='bx bxs-wrench'></i>
+                <span class="text">Invitation Tool</span>
+            </a>
+        </li>
+        
+        
+    <ul class="side-menu">
+        <li class="{% if request.path == '/settings/' %}active{% endif %}">
+            <a href="/settings/">
+                <i class='bx bxs-cog'></i>
+                <span class="text">Settings</span>
+            </a>
+        </li>
+        <li>
+            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout" style="background: none; border: none; color: inherit; cursor: pointer;">
+                    <i class='bx bx-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </button>
+            </form>
+        </li>
+    </ul>
+</section>
+
+
+    <!-- SIDEBAR -->
+    
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="#" class="notification">
+                <i class='bx bxs-bell'></i>
+                <span class="num">1</span>
+            </a>
+            <button id="translateBtn" style="background-color: var(--light-blue); border: transparent; padding: 5px; border-radius: 10px;">Translate to Hindi</button>
+    <div id="google_translate_element"></div>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'hi,en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
+        // Load the Google Translate script
+        function loadGoogleTranslate() {
+            const script = document.createElement('script');
+            script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            document.body.appendChild(script);
+        }
+
+        document.getElementById('translateBtn').onclick = function() {
+            // Load Google Translate when the button is clicked
+            loadGoogleTranslate();
+            document.getElementById('google_translate_element').style.display = 'block'; // Show the widget
+        };
+    </script>
+    </script>
+            <a href="#" class="profile">
+                <h1>{{ user.username }}!</h1>
+            </a>
+        </nav>
+
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+
+    <script>
+        const allSideMenu = document.querySelectorAll('#sidebar .side-menu.top li a');
+    
+        allSideMenu.forEach(item => {
+            const li = item.parentElement;
+    
+            item.addEventListener('click', function () {
+                allSideMenu.forEach(i => {
+                    i.parentElement.classList.remove('active');
+                });
+                li.classList.add('active');
+            });
+        });
+    
+        // TOGGLE SIDEBAR
+        const menuBar = document.querySelector('#content nav .bx.bx-menu');
+        const sidebar = document.getElementById('sidebar');
+    
+        menuBar.addEventListener('click', function () {
+            sidebar.classList.toggle('hide');
+        });
+    
+        const searchButton = document.querySelector('#content nav form .form-input button');
+        const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
+        const searchForm = document.querySelector('#content nav form');
+    
+        searchButton.addEventListener('click', function (e) {
+            if (window.innerWidth < 576) {
+                e.preventDefault();
+                searchForm.classList.toggle('show');
+                if (searchForm.classList.contains('show')) {
+                    searchButtonIcon.classList.replace('bx-search', 'bx-x');
+                } else {
+                    searchButtonIcon.classList.replace('bx-x', 'bx-search');
+                }
+            }
+        });
+    
+        if (window.innerWidth < 768) {
+            sidebar.classList.add('hide');
+        } else if (window.innerWidth > 576) {
+            searchButtonIcon.classList.replace('bx-x', 'bx-search');
+            searchForm.classList.remove('show');
+        }
+    
+        window.addEventListener('resize', function () {
+            if (this.innerWidth > 576) {
+                searchButtonIcon.classList.replace('bx-x', 'bx-search');
+                searchForm.classList.remove('show');
+            }
+        });
+    
+        const switchMode = document.getElementById('switch-mode');
+    
+        switchMode.addEventListener('change', function () {
+            if (this.checked) {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+        });
+    </script>
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
+{% include 'base/js.html' %}
+{% block extrascript %}
+
+{% endblock extrascript %}
